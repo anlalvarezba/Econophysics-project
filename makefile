@@ -1,4 +1,7 @@
-all: DLA-2D.o datos.txt
+all: ejecutar #DLA-2D.o datos.txt
+
+ejecutar: script.sh
+	./script.sh
 
 DLA-2D.o: DLA-2D.cpp
 	g++ -std=c++11 DLA-2D.cpp -o DLA-2D.o
@@ -8,5 +11,5 @@ datos.txt: DLA-2D.o
 
 .PHONY: clean
 clean:
-	rm -f *.o *.txt *~ a.out *#
+	rm -f *.o *.txt *~ a.out *# *.gp *.pdf
 
