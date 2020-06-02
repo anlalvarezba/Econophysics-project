@@ -7,7 +7,7 @@
 
 int main()
 {
-	int nsteps = 500;
+	int nsteps = 600;
 	int npaths = 150;
 	double ran = 0.0;
 	double ran2 = 0.0;
@@ -32,9 +32,9 @@ int main()
 	float* M=new float [nsteps*npaths];
 	float* N=new float [nsteps*npaths];
 	float* P=new float [nsteps*npaths*2];
-	float* xC=new float [100];
-	float* yC=new float [100];
-	float* C=new float [200];
+	float* xC=new float [npaths];
+	float* yC=new float [npaths];
+	float* C=new float [2*npaths];
 
 	xC[0] = 0.0;
 	yC[0] = 0.0;
@@ -54,21 +54,21 @@ int main()
 
 	
 
-	int seed=2;
-	int seed0=1;
-	int seed1=1;
-	int seed2=1;
+	//int seed=2;
+	//int seed0=1;
+	//int seed1=1;
+	//int seed2=1;
 	
-	std::mt19937 gen(seed);
-	std::mt19937 gen0(seed0);
-	std::mt19937 gen1(seed1);
-	std::mt19937 gen2(seed2);
+	//std::mt19937 gen(seed);
+	//std::mt19937 gen0(seed0);
+	//std::mt19937 gen1(seed1);
+	//std::mt19937 gen2(seed2);
 
-	//std::random_device rd;
-	//std::mt19937 gen(rd());
-	//std::mt19937 gen0(rd());
-	//std::mt19937 gen1(rd());
-	//std::mt19937 gen2(rd());
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::mt19937 gen0(rd());
+	std::mt19937 gen1(rd());
+	std::mt19937 gen2(rd());
 
 	//std::uniform_real_distribution<> dis(0.0,1.0);
 	std::normal_distribution<float> dis{0,1}; //mean and standard deviation
@@ -83,6 +83,8 @@ int main()
 	  int y=ydis(gen0);
 	  bool aggregated=false;
 	  bool almost_aggregated=false;
+
+	  double a = i/10.0;
 
 	 
 	  
@@ -166,16 +168,23 @@ int main()
 		      {
 			if(sqrt(pow(M[n+i*nsteps]-M[n+i*nsteps-1],2)+pow(N[n+i*nsteps]-N[n+i*nsteps-1],2))==1)
 			{
-			    	xC[size] = M[n+i*nsteps-1];
-				yC[size] = N[n+i*nsteps-1];
+			      if(floor(a)==ceil(a))
+				{
+			            xC[size] = 0.0;
+			            yC[size] = 0.0;
+				}
+			      else
+				{
+				    xC[size] = M[n+i*nsteps-1];
+			            yC[size] = N[n+i*nsteps-1];
+				}
 				aggregated = true;
 				size++;
-			
-				}
-				else
-				 {			 
-				almost_aggregated = true;			     
-				}
+			}
+			else
+			{			 
+				almost_aggregated = true;
+			}
 			break;
 		      }		    		   
 		  }
