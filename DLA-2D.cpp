@@ -7,6 +7,27 @@
 
 int main()
 {
+  int nr=10; //numero de repeticiones para encontrar distribucion tamaños
+
+  float* T=new float [nr]; //guarda los tamaños de los clusters
+  float* NR=new float [300]; //suma de los clusters de cada tamaño, debe ser del numero de particulas
+
+	
+
+	for(int i=0; i<nr; i++)
+	{
+		T[i] = 0.0;
+	}
+
+
+		for(int i=0; i<300; i++)
+	{
+		NR[i] = 0.0;
+	}
+  
+  for(int c=0; c<nr; c++)
+    {
+  
 	int nsteps = 600;
 	int npaths = 300;
 	double ran = 0.0;
@@ -24,10 +45,12 @@ int main()
 	int limit_y = 20;//0-10
 
 
-
 	double psize=0.7;
 
+
 	int size=1;
+
+	int dg = 0; //numero de particulas desagregadas
 
 
 	
@@ -86,7 +109,10 @@ int main()
 	  bool aggregated=false;
 	  bool almost_aggregated=false;
 
-	  double a = i/5.0;
+	  double a = i/10.0;
+
+	  
+
 
 	 
 	  
@@ -126,16 +152,17 @@ int main()
 		      {
 			if(sqrt(pow(M[n+i*nsteps]-M[n+i*nsteps-1],2)+pow(N[n+i*nsteps]-N[n+i*nsteps-1],2))==1)
 			{
-			     if(floor(a)==ceil(a)) 
-			  	    {
-			  	      xC[size] = 0.0;
-			  	      yC[size] = 0.0;
-			  	    }
-			  	  else
-			  	    {
+			  //if(floor(a)==ceil(a)) 
+			  //	  {
+			  //	      xC[size] = 0.0;
+			  //	      yC[size] = 0.0;
+			  //	      dg += 1;
+			  //	  }
+			  //     else
+			  //	  {
 				    xC[size] = M[n+i*nsteps-1];
 			            yC[size] = N[n+i*nsteps-1];
-				    }
+				    //	  }
 				aggregated = true;
 				size++;
 			}
@@ -185,7 +212,7 @@ int main()
 		}
 
 	
-
+	/*
 	for(int j=0; j<nsteps; j++)
 		{
 		for(int i=j; i<npaths*nsteps; i += nsteps)
@@ -194,18 +221,36 @@ int main()
 			}
 		printf (" \n");
 		}
+	*/
 
 
-	std::ofstream cluster;
-	cluster.open("cluster-datos.txt");
+
+	/////////////
+
+	//T[c]=size-1; //para DLA y ag sin considerar huecos ag
+	T[c]=size-dg-1;//para ag considerando huecos
+
+
+	/////////////////////////////
+
+
+		//std::ofstream cluster;
+		//cluster.open("cluster-datos.txt");
 	
-	for(int i=0; i<size; i ++)
-	  {
-	    cluster << xC[i] << "\t";
-	    cluster << yC[i] << std::endl;	
-	  } 
+		//for(int i=0; i<size; i ++)
+		//{
+		//cluster << xC[i] << "\t";
+		//cluster << yC[i] << std::endl;	
+		//} 
 
-	cluster.close();
+		//cluster.close();
+
+	//////////////////////////////////
+
+	//NR[size-2] += 1; //para DLA y ag sin considerar huecos
+	NR[size-2-dg] +=1; //para ag considerando huecos
+
+	///////////////////////////////////////
 
 	delete [] M;
 	delete [] N;
@@ -213,6 +258,32 @@ int main()
 	delete [] xC;
 	delete [] yC;
 	delete [] C;
+    }
+
+
+
+  for(int j=0; j<nr; j++)
+		{
+		printf("%5.0f  ", T[j]);
+		printf (" \n");
+		}
+
+		std::ofstream sizesnumber;
+		sizesnumber.open("sizesnumber-datos.txt");
+	
+		for(int i=0; i<300; i ++)
+		{
+		sizesnumber << i+1 << "\t";
+		sizesnumber << NR[i] << std::endl;	
+		} 
+
+		sizesnumber.close();
+
+
+
+  delete [] T;
+  delete [] NR;
+	
 
 	
 }
