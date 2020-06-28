@@ -40,7 +40,7 @@ set ylabel "Numero"
 set grid
 set size square
 #set key left top box
-plot [0:300][0:30] "$name2.txt" u 1:2 title "$cantidad" w p ps $VAR1 lt rgb "red" pointtype 7 
+plot [0:300][] "$name2.txt" u 1:2 title "$cantidad" w p ps $VAR1 lt rgb "red" pointtype 7 
 
 
 EOF
