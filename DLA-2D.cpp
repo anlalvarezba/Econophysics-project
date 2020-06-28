@@ -3,16 +3,17 @@
 #include <cstdio>
 #include <fstream>
 #include <cmath>
+#include <vector>
 
 
 int main()
 {
-  int nr=10; //numero de repeticiones para encontrar distribucion tamaños
+  int nr=500; //numero de repeticiones para encontrar distribucion tamaños
 
   float* T=new float [nr]; //guarda los tamaños de los clusters
-  float* NR=new float [300]; //suma de los clusters de cada tamaño, debe ser del numero de particulas
-
-	
+  int* NR=new int [300]; //suma de los clusters de cada tamaño, debe ser del numero de particulas
+  std::vector<std::vector<int>> v ={};
+ 
 
 	for(int i=0; i<nr; i++)
 	{
@@ -20,10 +21,10 @@ int main()
 	}
 
 
-		for(int i=0; i<300; i++)
+	for(int i=0; i<300; i++)
 	{
 		NR[i] = 0.0;
-	}
+		}
   
   for(int c=0; c<nr; c++)
     {
@@ -248,7 +249,7 @@ int main()
 	//////////////////////////////////
 
 	//NR[size-2] += 1; //para DLA y ag sin considerar huecos
-	NR[size-2-dg] +=1; //para ag considerando huecos
+	NR[size-1-dg] +=1; //para ag considerando huecos
 
 	///////////////////////////////////////
 
@@ -261,6 +262,15 @@ int main()
     }
 
 
+  for(int i=0; i<300; i ++)
+		{
+		  if(NR[i]!=0)
+		    {
+		      std::vector<int> t={i, NR[i]};
+		      v.push_back(t);
+		    }
+		} 
+
 
   for(int j=0; j<nr; j++)
 		{
@@ -268,16 +278,19 @@ int main()
 		printf (" \n");
 		}
 
-		std::ofstream sizesnumber;
-		sizesnumber.open("sizesnumber-datos.txt");
+  std::ofstream sizesnumber;
+  sizesnumber.open("sizesnumber-datos.txt");
 	
-		for(int i=0; i<300; i ++)
+  for(std::vector<int>n: v)
 		{
-		sizesnumber << i+1 << "\t";
-		sizesnumber << NR[i] << std::endl;	
+		  for(int x: n)
+		    {
+		     sizesnumber << x << "  ";
+		    }
+		  sizesnumber << "\n";
 		} 
 
-		sizesnumber.close();
+  sizesnumber.close();
 
 
 
